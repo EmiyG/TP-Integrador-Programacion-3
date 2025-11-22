@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css" type="text/css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/index.html">Consultar todos</a></li>
+                <li><a href="/consultar.html">Consultar por ID</a></li>
+                <li><a href="/crear.html">Crear</a></li>
+                <li><a href="/modificar.html">Modificar</a></li>
+                <li><a href="/eliminar.html">Eliminar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Listado de productos</h1>
+        <hr>
+        <form id="idForm">
+            <input type="text" name="name" id="nombreProd" placeholder="nombre" required>
+            <input type="text" name="image" id="imagenProd" placeholder="imagen" required>
+            <select name="category" id="categoriaProd">
+                <option value="food">comida</option>
+                <option value="drink">bebida</option>
+            </select>
+            <input type="text" name="price" id="precioProd" placeholder="precio" required>
+            <input type="submit" id="botonEnviar">
+        </form>
+        <section id="section-products"></section>
+
+    </main>
+</body>
+<script>
+    let formulario = document.getElementById("idForm");
+    formulario.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let formData = new FormData(event.target);
+        let data = Object.fromEntries(formData.entries())
+        console.log(data);
+        try {
+            let response = await fetch(`http://localhost:3500/productos`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            if (response.ok) {
+                let result = await response.json();
+                console.log(result.message)
+                alert(result.message)
+            }
+
+        } catch (e) {
+            console.log("error", e);
+
+        }
+    })
+
+</script>
+
+</html>

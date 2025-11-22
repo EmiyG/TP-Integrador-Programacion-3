@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css" type="text/css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/index.html">Consultar todos</a></li>
+                <li><a href="/consultar.html">Consultar por ID</a></li>
+                <li><a href="/crear.html">Crear</a></li>
+                <li><a href="/modificar.html">Modificar</a></li>
+                <li><a href="/eliminar.html">Eliminar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Listado de productos</h1>
+        <hr>
+        <form id="idForm">
+            <label for="idProd">Id producto</label>
+            <input type="text" name="id" id="idProd" placeholder="Id producto" required>
+            <input type="submit" id="botonEnviar">
+        </form>
+        <section id="section-products"></section>
+        <section id="nuevoForm"></section>
+    </main>
+</body>
+<script>
+    let sectionProductos = document.getElementById("section-products")
+    let url = "http://localhost:3500";
+    let formulario = document.getElementById("idForm");
+    let nuevoForm = document.getElementById("nuevoForm");
+
+    formulario.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let formData = new FormData(event.target);
+        let data = Object.fromEntries(formData.entries())
+        let idProd = data.id;
+
+        try {
+            let response = await fetch(`${url}/productos/${idProd}`)
+            let rows = await response.json();
+
+            if (response.ok) {
+                let producto = rows.payload[0];
+                crearFormulario(producto)
+                console.log(producto);
+
+            } else {
+                console.log("error: producto no encontrado")
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+    })
+
+    async function crearFormulario(producto) {
+        let updateForm = "";
+
+        updateForm = `        
+        <form id="formularioActualizacion">
+            <input type="hidden" name="id" id="idProd" value="${producto.id}" required>
+            <input type="text" name="name" id="nombreProd" value="${producto.name}" required>
+            <input type="text" name="image" id="imagenProd" value="${producto.image}" required>
+            <select name="category" id="categoriaProd">
+                <option value="food">comida</option>
+                <option value="drink">bebida</option>
+            </select>
+            <input type="text" name="price" id="precioProd" value="${producto.price}" required>
+            <input type="number" name="active" id="activo" value="${producto.active}" required>
+            <input type="submit" id="botonEnviar">
+        </form>
+        `
+        nuevoForm.innerHTML = updateForm;
+        formularioActualizacion = document.getElementById("formularioActualizacion")
+
+        formularioActualizacion.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            let formData = new FormData(event.target);
+            let data = Object.fromEntries(formData.entries())
+
+            try {
+                let response = await fetch(`${url}/productos/`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                let result = await response.json();
+                console.log(result);
+
+            } catch (e) {
+                console.log(e);
+            }
+
+        })
+
+    }
+
+    function mostrarProductos(producto) {
+        let htmlProductos = "";
+
+        htmlProductos = `
+            <div class="card-producto">
+                <img class="producto-img" src="${producto.image}" alt="${producto.name}">
+                <h3>${producto.name}</h3>
+                <p>Id: ${producto.id}</p>
+                <p>$${producto.price}</p>
+            </div>
+        `;
+        sectionProductos.innerHTML = htmlProductos;
+    }
+</script>
+
+</html>
