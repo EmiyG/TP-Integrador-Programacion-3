@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Crear Producto</title>
+    <link rel="icon" type="image/x-icon" href="img/boca-juniors-logo-escudo-0.png">
+</head>
+
+<body>
+    <header>
+        <nav>
+        <div class="nav-container">
+            <img src="img/boca-juniors-logo-escudo-0.png" class="nav-logo" alt="Logo Boca">
+
+            <ul class="nav-menu">
+                <li><a href="index.html">Consultar todos</a></li>
+                <li><a href="consultar.html">Consultar por ID</a></li>
+                <li><a href="crear.html">Crear</a></li>
+                <li><a href="modificar.html">Modificar</a></li>
+                <li><a href="eliminar.html">Eliminar</a></li>
+            </ul>
+        </div>
+</nav>
+    </header>
+
+    <main>
+        <h1>Crear Producto</h1>
+        <hr> 
+
+        <form id="formCrear">
+            <label for="name">Nombre del producto</label>
+            <input type="text" id="name" name="name" placeholder="Nombre del producto" required>
+            
+            <label for="image">URL de la imagen</label>
+            <input type="url" id="image" name="image" placeholder="URL de la imagen" required>
+
+            <label for="category">Categoría</label>
+            <select name="category" id="category" required>
+                <option value="" disabled selected>Seleccionar categoría</option>
+                <option value="camiseta">Camiseta</option>
+                <option value="botines">Botines</option>
+            </select>
+
+            <label for="price">Precio</label>
+            <input type="number" id="price" name="price" placeholder="Precio" required>
+            
+            <label for="active">Activo (1 o 0)</label>
+            <input type="number" id="active" name="active" placeholder="Activo (1 o 0)" value="1" required>
+
+            <input type="submit" value="Crear Producto">
+        </form>
+
+        <p id="resultado" style="margin-top: 20px;"></p>
+    </main>
+    <script src="carrito.js"></script>
+
+</body>
+
+<script>
+    const BASE_URL = "http://localhost:3000";
+    const formCrear = document.getElementById("formCrear");
+    const resultado = document.getElementById("resultado");
+
+    formCrear.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        resultado.textContent = "";
+
+        let formData = new FormData(event.target);
+        let data = Object.fromEntries(formData.entries());
+
+        
+        data.price = parseFloat(data.price);
+        data.active = parseInt(data.active);
+
+        try {
+            let response = await fetch(`${BASE_URL}/productos`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            let result = await response.json();
+
+            if (response.ok) {
+                resultado.style.color = "lightgreen";
+                resultado.textContent = ` Producto creado correctamente (ID: ${result.id}).`;
+                formCrear.reset();
+            } else {
+                resultado.style.color = "orange";
+                
+                resultado.textContent = result.message || "Error al crear el producto. Revisa los datos."; 
+            }
+
+        } catch (e) {
+            console.error(e);
+            resultado.style.color = "red";
+            resultado.textContent = "Error al conectar al servidor. Esta funcionando en.... " + BASE_URL;
+        }
+    });
+</script>
+
+</html>

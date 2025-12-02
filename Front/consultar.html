@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Consultar ID</title>
+    <link rel="icon" type="image/x-icon" href="img/boca-juniors-logo-escudo-0.png">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <img src="img/boca-juniors-logo-escudo-0.png" class="nav-logo" alt="Logo Boca">
+
+                <ul class="nav-menu">
+                    <li><a href="index.html">Consultar todos</a></li>
+                    <li><a href="consultar.html">Consultar por ID</a></li>
+                    <li><a href="crear.html">Crear</a></li>
+                    <li><a href="modificar.html">Modificar</a></li>
+                    <li><a href="eliminar.html">Eliminar</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h1>Listado de productos</h1>
+        <hr>
+        <form id="idForm">
+            <label for="idProd">Id producto</label>
+            <input type="text" name="idProd" id="idProd" placeholder="Id producto" required>
+            <input type="submit" id="botonEnviar">
+        </form>
+        <section id="section-products"></section>
+
+    </main>
+    <script src="carrito.js"></script>
+
+</body>
+<script>
+    let sectionProductos = document.getElementById("section-products")
+    let url = "http://localhost:3000";
+    let formulario = document.getElementById("idForm");
+    let id = document.getElementById("idProd")
+
+    formulario.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let formData = new FormData(event.target);
+        console.log(formData)
+        let data = Object.fromEntries(formData.entries())
+        console.log(data)
+        let idProd = data.idProd;
+
+        try {
+            let response = await fetch(`${url}/productos/${idProd}`)
+            let rows = await response.json();
+            if (response.ok) {
+                let producto = rows.payload[0];
+                console.log(producto);
+                mostrarProductos(producto);
+
+            } else {
+                console.log("error: producto no encontrado")
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+    })
+
+    function mostrarProductos(producto) {
+        let htmlProductos = "";
+
+        htmlProductos = `
+            <div class="card-producto">
+                <img class="producto-img" src="${producto.image}">
+                <h3>${producto.name}</h3>
+                <p>Id: ${producto.id}</p>
+                <p>$${producto.price}</p>
+
+                <button class="btn-add" onclick="agregarAlCarrito(${producto.id})">
+                    Agregar al carrito
+            </button>
+        </div>
+        `;
+        sectionProductos.innerHTML = htmlProductos;
+    }
+</script>
+
+</html>
