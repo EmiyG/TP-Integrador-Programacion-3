@@ -14,7 +14,6 @@
         <nav>
             <div class="nav-container">
                 <img src="img/boca-juniors-logo-escudo-0.png" class="nav-logo" alt="Logo Boca">
-
                 <ul class="nav-menu">
                     <li><a href="index.html">Consultar todos</a></li>
                     <li><a href="consultar.html">Consultar por ID</a></li>
@@ -33,12 +32,19 @@
     </header>
 
     <main>
-        <h1 style="text-align:center; margin-bottom: 20px;">Listado de Productos</h1>
+        <!-- Mensaje de bienvenida personalizado -->
+        <h1 id="bienvenida" style="text-align:center; margin-bottom: 20px;"></h1>
 
+        <h1 style="text-align:center; margin-bottom: 20px;">Listado de Productos</h1>
         <section id="section-products"></section>
     </main>
 
     <script>
+        // Mostrar mensaje de bienvenida
+        const nombreUsuario = localStorage.getItem("nombreUsuario") || "Cliente";
+        const h1Bienvenida = document.getElementById("bienvenida");
+        h1Bienvenida.textContent = `¡Bienvenido, ${nombreUsuario}!`;
+
         const sectionProductos = document.getElementById("section-products");
         const BASE_URL = "http://localhost:3000";
 
@@ -74,7 +80,6 @@
                         <p><strong>Precio:</strong> $${producto.price}</p>
                         <p><strong>ID:</strong> ${producto.id}</p>
                     </div>
-
                     <button class="btn-add" onclick="agregarAlCarrito(${producto.id})">
                         Agregar al carrito
                     </button>
@@ -89,6 +94,5 @@
 
     <!-- Carga del carrito -->
     <script src="carrito.js"></script>
-
 </body>
 </html>
