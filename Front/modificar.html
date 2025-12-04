@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+    <title>Modificar Producto</title>
+    <link rel="icon" type="image/x-icon" href="img/boca-juniors-logo-escudo-0.png">
+</head>
+
+<body>
+    <header>
+        <nav>
+    <div class="nav-container">
+        <img src="img/boca-juniors-logo-escudo-0.png" class="nav-logo" alt="Logo Boca">
+
+        <ul class="nav-menu">
+            <li><a href="index.html">Consultar todos</a></li>
+            <li><a href="consultar.html">Consultar por ID</a></li>
+            <li><a href="crear.html">Crear</a></li>
+            <li><a href="modificar.html">Modificar</a></li>
+            <li><a href="eliminar.html">Eliminar</a></li>
+            <li>
+                <a href="carrito.html">
+                    🛒 Carrito <span id="cart-count">0</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+    </header>
+    <main>
+        <h1>Modificar Producto</h1>
+
+        <form id="idForm">
+            <input type="number" name="id" id="idProd" placeholder="ID del producto a modificar" required>
+            <input type="submit" value="Buscar ID">
+        </form>
+
+        <section id="nuevoForm"></section>
+        <p id="resultado" style="margin-top: 20px;"></p>
+    </main>
+    
+</body>
+
+<script src="carrito.js"></script>
+
+
+<script>
+    const nuevoForm = document.getElementById("nuevoForm");
+    const formularioBusqueda = document.getElementById("idForm");
+    const resultado = document.getElementById("resultado");
+    const BASE_URL = "http://localhost:3000";
+
+    // 1. Manejar la busqueda del ID
+    formularioBusqueda.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        nuevoForm.innerHTML = "";
+        resultado.textContent = "";
+
+        let formData = new FormData(event.target);
+        let data = Object.fromEntries(formData.entries());
+        let idProd = data.id;
+
+        try {
+            let response = await fetch(`${BASE_URL}/productos/${idProd}`);
+            let rows = await response.json();
+
+            if (response.ok && rows.payload && rows.payload.length > 0) {
+                let producto = rows.payload[0];
+                crearFormularioActualizacion(producto);
+                resultado.textContent = `Producto ID ${idProd} listo para modificar.`;
+                resultado.style.color = "var(--boca-yellow)";
+            } else {
+                resultado.textContent = "Error: Producto no encontrado para modificar.";
+                resultado.style.color = "orange";
+            }
+
+        } catch (e) {
+            console.error(e);
+            resultado.textContent = "Error al conectar con el servidor.";
+            resultado.style.color = "red";
+        }
+    });
+
+    // 2. Crear el formulario de actualización
+    function crearFormularioActualizacion(producto) {
+        const updateFormHTML = `
+    <h2>Datos a Modificar</h2>
+    <form id="formularioActualizacion">
+        <input type="hidden" name="id" value="${producto.id}">
+        <input type="text" name="name" id="nombreProd" placeholder="Nombre" value="${producto.name || ''}" required>
+        <input type="url" name="image" id="imagenProd" placeholder="URL de la imagen" value="${producto.image || ''}" required>
+
+        <select name="category" id="categoriaProd" required>
+            <option value="camiseta" ${producto.category === 'camiseta' ? 'selected' : ''}>Camiseta</option>
+            <option value="botines" ${producto.category === 'botines' ? 'selected' : ''}>Botines</option>
+        </select>
+
+        <input type="number" step="0.01" name="price" id="precioProd" placeholder="Precio" value="${producto.price || ''}" required>
+        <input type="number" name="active" id="activo" placeholder="Activo (1 o 0)" value="${producto.active || 1}" required>
+        <input type="submit" value="Actualizar Producto">
+    </form>
+`;
+        nuevoForm.innerHTML = updateFormHTML;
+
+        // 3. Agregar el listener al nuevo formulario
+        const formularioActualizacion = document.getElementById("formularioActualizacion");
+        formularioActualizacion.addEventListener("submit", handleActualizacion);
+    }
+
+    // 4. Manejar el envío de la actualización (PUT)
+    async function handleActualizacion(event) {
+        event.preventDefault();
+        resultado.textContent = "";
+
+        let formData = new FormData(event.target);
+        let data = Object.fromEntries(formData.entries());
+
+        // Asegurar la conversión de tipus
+        data.price = parseFloat(data.price);
+        data.active = parseInt(data.active);
+
+        try {
+            let response = await fetch(`${BASE_URL}/productos`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            let result = await response.json();
+
+            if (response.ok) {
+                resultado.style.color = "lightgreen";
+                resultado.textContent = result.message || `Producto ID ${data.id} actualizado exitosamente.`;
+            } else {
+                resultado.style.color = "orange";
+                resultado.textContent = result.message || "Error al actualizar el producto.";
+            }
+
+        } catch (e) {
+            console.error(e);
+            resultado.style.color = "red";
+            resultado.textContent = "Error al conectar con el servidor.";
+        }
+    }
+</script>
+
+</html>

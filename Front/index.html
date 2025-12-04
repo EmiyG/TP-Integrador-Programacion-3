@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Consulta de Productos</title>
+    <link rel="icon" type="image/x-icon" href="img/boca-juniors-logo-escudo-0.png">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <img src="img/boca-juniors-logo-escudo-0.png" class="nav-logo" alt="Logo Boca">
+
+                <ul class="nav-menu">
+                    <li><a href="index.html">Consultar todos</a></li>
+                    <li><a href="consultar.html">Consultar por ID</a></li>
+                    <li><a href="crear.html">Crear</a></li>
+                    <li><a href="modificar.html">Modificar</a></li>
+                    <li><a href="eliminar.html">Eliminar</a></li>
+                    <li>
+                        <a href="carrito.html">
+                            🛒 Carrito 
+                            <span id="cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 style="text-align:center; margin-bottom: 20px;">Listado de Productos</h1>
+
+        <section id="section-products"></section>
+    </main>
+
+    <script>
+        const sectionProductos = document.getElementById("section-products");
+        const BASE_URL = "http://localhost:3000";
+
+        async function obtenerProductos() {
+            try {
+                let response = await fetch(`${BASE_URL}/productos`);
+                if (!response.ok) throw new Error(`Error al obtener productos: ${response.status}`);
+
+                let data = await response.json();
+                let productos = data.payload || data;
+
+                mostrarProductos(productos);
+
+            } catch (error) {
+                console.error("Error:", error);
+                sectionProductos.innerHTML = `
+                    <p style="color: red;">Error al conectar con la API. ¿El backend está ejecutándose?</p>
+                `;
+            }
+        }
+
+        function mostrarProductos(array) {
+            if (!array || array.length === 0) {
+                sectionProductos.innerHTML = "<p>No se encontraron productos.</p>";
+                return;
+            }
+
+            const html = array.map(producto => `
+                <article class="card-producto">
+                    <img class="producto-img" src="${producto.image}">
+                    <h3>${producto.name}</h3>
+                    <div class="info-row">
+                        <p><strong>Precio:</strong> $${producto.price}</p>
+                        <p><strong>ID:</strong> ${producto.id}</p>
+                    </div>
+
+                    <button class="btn-add" onclick="agregarAlCarrito(${producto.id})">
+                        Agregar al carrito
+                    </button>
+                </article>
+            `).join("");
+
+            sectionProductos.innerHTML = html;
+        }
+
+        obtenerProductos();
+    </script>
+
+    <!-- Carga del carrito -->
+    <script src="carrito.js"></script>
+
+</body>
+</html>

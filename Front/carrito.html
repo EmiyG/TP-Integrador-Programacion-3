@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Carrito</title>
+    <link rel="icon" type="image/x-icon" href="img/boca-juniors-logo-escudo-0.png">   
+</head>
+
+<body>
+<header>
+    <nav>
+        <div class="nav-container">
+
+            <img src="img/boca-juniors-logo-escudo-0.png" class="nav-logo" alt="Logo Boca">
+
+            <ul class="nav-menu">
+                <li><a href="index.html">Consultar todos</a></li>
+                <li><a href="consultar.html">Consultar por ID</a></li>
+                <li><a href="crear.html">Crear</a></li>
+                <li><a href="modificar.html">Modificar</a></li>
+                <li><a href="eliminar.html">Eliminar</a></li>
+
+                
+                <li>
+                    <a href="carrito.html">🛒 Carrito <span id="cart-count">(0)</span></a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+
+<main class="carrito-container">
+    <h1>Carrito</h1>
+
+    <div id="listaCarrito"></div>
+
+    <h2 id="total">Total: $0</h2>
+
+    <button id="btnComprar">Comprar</button>
+    <button id="btnVaciar">Vaciar Carrito</button>
+
+</main>
+
+<script src="carrito.js"></script>
+<script src="carrito_pagina.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>

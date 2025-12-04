@@ -1,0 +1,307 @@
+:root {
+    --boca-blue: #0A1C40;
+    --boca-yellow: #f3b229;
+    --boca-light: #F7F7F7;
+    --boca-dark: #07152F;
+
+    --border-radius-main: 8px;
+    --transition-speed: 0.25s ease;
+    --shadow-strong: 0 8px 20px rgba(0, 0, 0, 0.25);
+    --shadow-soft: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- FONDO ---- */
+
+body {
+    background: #ffffff !important;
+    color: var(--boca-blue);
+    margin: 0;
+    font-family: "Inter", Arial, sans-serif;
+}
+
+/* ---- NAV COMPLETO ---- */
+
+nav {
+    width: 100%;
+    background: var(--boca-blue);
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-soft);
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1300px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Tamaño real del logo */
+.nav-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+/* Menú estilo */
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+.nav-menu a {
+    color: var(--boca-light);
+    font-size: 18px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: var(--transition-speed);
+}
+
+.nav-menu a:hover {
+    background: rgba(255,255,255,0.2);
+    color: var(--boca-yellow);
+}
+
+/* ---- TITULO ---- */
+
+h1, h2, h3 {
+    text-align: center;
+    color: var(--boca-blue);
+}
+
+/* ---- PRODUCTOS ---- */
+
+#section-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 60px;
+    width: 90%;
+    max-width: 1300px;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+/* CARD PRODUCTO */
+.card-producto {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: var(--shadow-strong);
+    border-top: 4px solid var(--boca-yellow);
+    color: var(--boca-blue);
+    width: 100%;
+    margin: 0 auto;
+    max-width: 420px;     
+}
+
+.producto-img {
+    width: 100%;
+    height: 240px;
+    object-fit: contain;
+    border-radius: var(--border-radius-main);
+    margin-bottom: 20px;
+}
+
+/* TEXTO DENTRO DE LA CARD */
+.card-producto p,
+.card-producto b {
+    font-size: 17px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.info-row p {
+    margin: 0;
+}
+
+/* ---- FORMULARIO ---- */
+
+form {
+    margin: auto;
+    max-width: 420px;
+    background: white;                     
+    padding: 35px;
+    border-radius: 14px;                     
+    box-shadow: var(--shadow-strong);       
+    color: var(--boca-blue);                
+    border-top: 4px solid var(--boca-yellow);
+    margin: 50px auto;   
+}
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0 22px 0;
+    border-radius: var(--border-radius-main);
+    border: 1px solid #ccc;              
+    background: #f7f9fc;                    
+    color: #333;
+    font-size: 15px;
+    transition: var(--transition-speed);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--boca-yellow);
+    box-shadow: 0 0 0 2px rgba(224, 178, 0, 0.6);
+}
+
+/* ---- BOTONES ---- */
+
+input[type="submit"] {
+    background: var(--boca-yellow);
+    color: var(--boca-dark);
+    font-size: 17px;
+    padding: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius-main);
+    transition: var(--transition-speed);
+}
+
+input[type="submit"]:hover {
+    background: #c79a00;
+    transform: translateY(-2px);
+}
+
+
+.btn-add {
+    width: 100%;
+    background: var(--boca-yellow);
+    color: var(--boca-dark);
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    margin-top: 15px;
+}
+
+.btn-add:hover {
+    background: var(--boca-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* ---- CARRITO ---- */
+
+/* Contenedor general */
+.carrito-container {
+    max-width: 730px;
+    margin: auto;
+}
+
+/* Cada ítem del carrito */
+.item-carrito {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 25px;
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: var(--shadow-strong);
+    border-top: 4px solid var(--boca-yellow);
+    color: var(--boca-blue);
+    min-height: 180px;  
+}
+
+/* Imagen con tamaño fijo */
+.item-carrito img {
+    width: 150px;
+    height: 150px;     
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Información — altura fija */
+.item-info {
+    flex: 1;
+    min-height: 120px;     
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: flex-start; 
+}
+
+.item-info h3 {
+    margin-bottom: 10px;
+}
+
+/* Botones + y - */
+.acciones {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    gap: 10px;
+}
+
+.acciones button {
+    padding: 6px 12px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/* Total del carrito */
+#total {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Botón vaciar */
+#btnVaciar {
+    display: block;    
+    margin: 20px auto;  
+    background: #e74c3c;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px; 
+}
+
+#btnVaciar:hover {
+    background: #bd3424;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Botón vaciar */
+#btnComprar {
+    display: block;     
+    margin: 20px auto;  
+    background: var(--boca-yellow);
+    color: var(--boca-dark);
+    padding: 20px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    font-size: 22px;   
+    font-weight: 700; 
+}
+
+#btnComprar:hover {
+    background: var(--boca-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
