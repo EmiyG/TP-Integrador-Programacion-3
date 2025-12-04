@@ -111,7 +111,7 @@
         formularioActualizacion.addEventListener("submit", handleActualizacion);
     }
 
-    // 4. Manejar el envío de la actualización (PUT)
+    // 4. Manejar el envio de la actualización (PUT)
     async function handleActualizacion(event) {
         event.preventDefault();
         resultado.textContent = "";
@@ -119,7 +119,7 @@
         let formData = new FormData(event.target);
         let data = Object.fromEntries(formData.entries());
 
-        // Asegurar la conversión de tipus
+        // Asegurar la conversion de tipus
         data.price = parseFloat(data.price);
         data.active = parseInt(data.active);
 

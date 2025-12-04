@@ -67,7 +67,7 @@ function renderCarrito() {
     let total = 0;
 
     if (carrito.length === 0) {
-        contenedor.innerHTML = "<p>Tu carrito está vacío.</p>";
+        contenedor.innerHTML = "<p>Tu carrito esta vacio.</p>";
         document.getElementById("total").textContent = "Total: $0";
         actualizarContadorCarrito();
         return;
@@ -133,24 +133,21 @@ function eliminar(id) {
 }
 
 
-// Botón vaciar carrito
+// Boton vaciar carrito
 document.getElementById("btnVaciar").addEventListener("click", () => {
     setCarrito([]);
     renderCarrito();
     actualizarContadorCarrito();
 });
 
-
-// ---------------------------
 //     GENERAR TICKET PDF
-// ---------------------------
 function imprimirTicket(carrito) {
     const { jsPDF } = window.jspdf; 
     const doc = new jsPDF();
 
     let y = 10;
 
-    // AHORA SÍ: usar localStorage
+    // Usamos LocalStorage para obtener el nombre del usuario
     let nombreUsuario = localStorage.getItem("nombreUsuario") || "Cliente";
 
     doc.setFontSize(18);

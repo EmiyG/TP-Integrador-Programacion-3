@@ -55,7 +55,7 @@ app.post("/productos", async (req, res) => {
 
         const { name, category, price, image, active } = req.body;
 
-        // Validación básica
+        // Validacion basica
         if (!name || !category || price === undefined) {
             console.log("Faltan campos obligatorios:", { name, category, price });
             return res.status(400).json({ message: "Faltan campos obligatorios (name, category, price)" });

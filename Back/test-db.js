@@ -9,7 +9,7 @@ const mysql = require("mysql2/promise");
             database: "tienda"
         });
 
-        console.log("✔ CONEXION EXITOSA A MYSQL CON XAMPp");
+        console.log("CONEXION EXITOSA A MYSQL CON XAMPp");
         process.exit();
     } catch (e) {
         console.log("ERROR DE CONEXION:");
