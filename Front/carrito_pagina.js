@@ -1,3 +1,4 @@
+// Inicializa carrito
 if (!localStorage.getItem("carrito")) {
     localStorage.setItem("carrito", JSON.stringify([]));
 }
@@ -20,6 +21,8 @@ function actualizarContadorCarrito() {
 
 actualizarContadorCarrito();
 
+
+// Agregar al carrito
 async function agregarAlCarrito(idProducto) {
     try {
         let response = await fetch(`http://localhost:3000/productos/${idProducto}`);
@@ -56,6 +59,8 @@ async function agregarAlCarrito(idProducto) {
     }
 }
 
+
+// Render carrito
 function renderCarrito() {
     let carrito = getCarrito();
     let contenedor = document.getElementById("listaCarrito");
@@ -96,7 +101,8 @@ function renderCarrito() {
     actualizarContadorCarrito();
 }
 
-// CRUD dentro del carrito
+
+// CRUD carrito
 function sumar(id) {
     let carrito = getCarrito();
     let prod = carrito.find(p => p.id === id);
@@ -126,26 +132,35 @@ function eliminar(id) {
     renderCarrito();
 }
 
-// Vaciar carrito
+
+// Botón vaciar carrito
 document.getElementById("btnVaciar").addEventListener("click", () => {
     setCarrito([]);
     renderCarrito();
     actualizarContadorCarrito();
 });
 
-// GENERA TICKET PDF (jsPDF)
 
+// ---------------------------
+//     GENERAR TICKET PDF
+// ---------------------------
 function imprimirTicket(carrito) {
     const { jsPDF } = window.jspdf; 
     const doc = new jsPDF();
 
     let y = 10;
 
+    // AHORA SÍ: usar localStorage
+    let nombreUsuario = localStorage.getItem("nombreUsuario") || "Cliente";
+
     doc.setFontSize(18);
     doc.text("Ticket de compra", 10, y);
     y += 10;
 
     doc.setFontSize(12);
+    doc.text(`Cliente: ${nombreUsuario}`, 10, y);
+    y += 8;
+
     doc.text(`Fecha: ${new Date().toLocaleString()}`, 10, y);
     y += 10;
 
@@ -158,7 +173,7 @@ function imprimirTicket(carrito) {
         let subtotal = item.price * item.cantidad;
         total += subtotal;
 
-        doc.text(`${item.name}`, 10, y); 
+        doc.text(`${item.name}`, 10, y);
         y += 6;
         doc.text(`Cantidad: ${item.cantidad}  -  Precio: $${item.price}`, 10, y);
         y += 6;
@@ -172,11 +187,13 @@ function imprimirTicket(carrito) {
     doc.text(`TOTAL: $${total.toFixed(2)}`, 10, y);
     y += 10;
 
-    doc.text("¡Gracias por su compra!", 10, y);
+    doc.text(`¡Gracias por su compra, ${nombreUsuario}!`, 10, y);
 
     doc.save("ticket.pdf");
 }
 
+
+// FINALIZAR COMPRA
 document.getElementById("btnComprar").addEventListener("click", () => {
     let carrito = getCarrito();
 
@@ -185,7 +202,7 @@ document.getElementById("btnComprar").addEventListener("click", () => {
         return;
     }
 
-    // 1) Imprimir ticket (PDF)
+    // 1) Generar ticket PDF
     imprimirTicket(carrito);
 
     // 2) Vaciar carrito

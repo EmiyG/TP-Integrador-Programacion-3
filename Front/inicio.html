@@ -21,13 +21,31 @@
             color: #f3b229;
             font-size: 60px;
             text-align: center;
-            margin-bottom: 65px;
+            margin-bottom: 40px;
         }
         
         #logo {
             width: 500px; 
             height: auto;
             margin-bottom: 10px; 
+        }
+
+        #inputUsuario {
+            padding: 15px;
+            width: 400px;
+            font-size: 30px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #error {
+            color: red;
+            font-size: 25px;
+            margin-bottom: 20px;
+            display: none;
         }
 
         button {
@@ -45,16 +63,41 @@
             background: #f3b229;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
+        }
     </style>
 </head>
 <body>
+
     <img id="logo" src="img/boca-juniors-logo-escudo-0.png" alt="Escudo de Boca Juniors">
     <h1>Bienvenido a Tienda Xeneize</h1>
 
-    <button onclick="window.location.href='index.html'">
+    <input type="text" id="inputUsuario" placeholder="Ingresá tu nombre">
+
+    <p id="error">El nombre debe tener al menos 2 caracteres.</p>
+
+    <button id="btnIngresar">
         INGRESAR
     </button>
+
+    <script>
+        document.getElementById("btnIngresar").addEventListener("click", () => {
+            let nombre = document.getElementById("inputUsuario").value.trim();
+            let error = document.getElementById("error");
+
+            if (nombre.length < 2) {
+                error.style.display = "block";
+                return;
+            }
+
+            error.style.display = "none";
+
+            // Guardar nombre en localStorage
+            localStorage.setItem("nombreUsuario", nombre);
+
+            // Redirigir al index
+            window.location.href = "index.html";
+        });
+    </script>
 
 </body>
 </html>
